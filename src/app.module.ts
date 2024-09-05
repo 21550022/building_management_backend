@@ -7,6 +7,8 @@ import { UsersModule } from './modules/users/users.module';
 import { User } from './modules/users/entities/user.entity';
 import { BuildingsModule } from './modules/buildings/buildings.module';
 import { Building } from './modules/buildings/entities/building.entity';
+import { BuildingLocationsModule } from './modules/building-locations/building-locations.module';
+import { BuildingLocation } from './modules/building-locations/entities/building-location.entity';
 
 
 const dataSourceOptions: DataSourceOptions = {
@@ -16,7 +18,7 @@ const dataSourceOptions: DataSourceOptions = {
   username: 'postgres',
   password: 'mysecretpassword',
   database: 'postgres',
-  entities: [User, Building],
+  entities: [User, Building, BuildingLocation],
   synchronize: true,
 }
 
@@ -25,6 +27,7 @@ const dataSourceOptions: DataSourceOptions = {
     TypeOrmModule.forRoot(dataSourceOptions),
     UsersModule,
     BuildingsModule,
+    BuildingLocationsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
