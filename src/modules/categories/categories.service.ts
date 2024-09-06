@@ -14,11 +14,22 @@ export class CategoriesService {
   async create(createCategoryDto: CreateCategoryDto) {
     try {
       const { parentCategoryId: parentId } = createCategoryDto
-      const parent = parentId ? await this.categoryRepository.findOneBy({ id: parentId }) : null
+      const category = this.categoryRepository.create(createCategoryDto)
+
+      const trees = await this.categoryRepository.findTrees()
+      if (trees.length === 0) {
+        return await this.categoryRepository.save(category)
+      }
+      if(!parentId) {
+        const trees = await this.categoryRepository.findTrees()
+        trees.push(category)
+        return await this.categoryRepository.save(trees)
+      }
+      
+      const parent = parentId ? await this.categoryRepository.findOneBy({ id: parentId }) : null      
       if (!parent) {
         throw new Error('Parent category not found')
       }
-      const category = this.categoryRepository.create(createCategoryDto)
       category.parent = parent
       return await this.categoryRepository.save(category)
     } catch (error) {

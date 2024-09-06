@@ -9,7 +9,7 @@ import {
 } from "typeorm"
 
 @Entity()
-@Tree("nested-set")
+@Tree("materialized-path")
 export class Category {
   @PrimaryGeneratedColumn()
   id: number
