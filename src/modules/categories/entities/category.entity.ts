@@ -9,7 +9,7 @@ import {
 } from "typeorm"
 
 @Entity()
-@Tree("materialized-path")
+@Tree("closure-table")
 export class Category {
   @PrimaryGeneratedColumn()
   id: number
