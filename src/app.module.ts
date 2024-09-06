@@ -1,27 +1,22 @@
-import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { DataSourceOptions } from "typeorm";
-import { UsersModule } from './modules/users/users.module';
-import { User } from './modules/users/entities/user.entity';
-import { BuildingsModule } from './modules/buildings/buildings.module';
-import { Building } from './modules/buildings/entities/building.entity';
-import { BuildingLocationsModule } from './modules/building-locations/building-locations.module';
-import { BuildingLocation } from './modules/building-locations/entities/building-location.entity';
-import { CategoriesModule } from './modules/categories/categories.module';
-import { Category } from './modules/categories/entities/category.entity';
+import {Module} from '@nestjs/common';
+import {AppController} from './app.controller';
+import {AppService} from './app.service';
+import {TypeOrmModule,TypeOrmModuleOptions} from '@nestjs/typeorm';
+import {UsersModule} from './modules/users/users.module';
+import {BuildingsModule} from './modules/buildings/buildings.module';
+import {BuildingLocationsModule} from './modules/building-locations/building-locations.module';
+import {CategoriesModule} from './modules/categories/categories.module';
 
 
-const dataSourceOptions: DataSourceOptions = {
+const dataSourceOptions: TypeOrmModuleOptions = {
   type: 'postgres',
   host: 'localhost',
   port: 5432,
   username: 'postgres',
   password: 'mysecretpassword',
   database: 'postgres',
-  entities: [User, Building, BuildingLocation, Category],
   synchronize: true,
+  autoLoadEntities: true,
 }
 
 @Module({
