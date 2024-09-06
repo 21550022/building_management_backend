@@ -9,6 +9,8 @@ import { BuildingsModule } from './modules/buildings/buildings.module';
 import { Building } from './modules/buildings/entities/building.entity';
 import { BuildingLocationsModule } from './modules/building-locations/building-locations.module';
 import { BuildingLocation } from './modules/building-locations/entities/building-location.entity';
+import { CategoriesModule } from './modules/categories/categories.module';
+import { Category } from './modules/categories/entities/category.entity';
 
 
 const dataSourceOptions: DataSourceOptions = {
@@ -18,7 +20,7 @@ const dataSourceOptions: DataSourceOptions = {
   username: 'postgres',
   password: 'mysecretpassword',
   database: 'postgres',
-  entities: [User, Building, BuildingLocation],
+  entities: [User, Building, BuildingLocation, Category],
   synchronize: true,
 }
 
@@ -28,6 +30,7 @@ const dataSourceOptions: DataSourceOptions = {
     UsersModule,
     BuildingsModule,
     BuildingLocationsModule,
+    CategoriesModule,
   ],
   controllers: [AppController],
   providers: [AppService],
