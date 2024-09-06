@@ -10,6 +10,5 @@ import { Building } from './entities/building.entity';
   ],
   controllers: [BuildingsController],
   providers: [BuildingsService],
-  exports: [TypeOrmModule]
 })
 export class BuildingsModule {}
