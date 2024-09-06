@@ -25,8 +25,8 @@ export class CategoriesService {
         trees.push(category)
         return await this.categoryRepository.save(trees)
       }
-      
-      const parent = parentId ? await this.categoryRepository.findOneBy({ id: parentId }) : null      
+
+      const parent = parentId ? await this.categoryRepository.findOneBy({ id: parentId }) : null
       if (!parent) {
         throw new Error('Parent category not found')
       }
@@ -38,7 +38,7 @@ export class CategoriesService {
   }
 
   async findAll() {
-    return await this.categoryRepository.manager.getTreeRepository(Category).findTrees({ relations: ['children', 'parent'] })
+    return await this.categoryRepository.find({ relations: ['children', 'parent'] });
   }
 
   findOne(id: number) {
@@ -61,6 +61,5 @@ export class CategoriesService {
   }
 
   remove(id: number) {
-
   }
 }
