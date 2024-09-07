@@ -1,34 +1,72 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe } from '@nestjs/common';
-import { BuildingLocationsService } from './building-locations.service';
-import { CreateBuildingLocationDto } from './dto/create-building-location.dto';
-import { UpdateBuildingLocationDto } from './dto/update-building-location.dto';
+import {Controller, Post, Get, Patch, Delete, Body, Param, ParseIntPipe, HttpStatus, InternalServerErrorException} from '@nestjs/common';
+import {CreateBuildingLocationDto} from './dto/create-building-location.dto';
+import {UpdateBuildingLocationDto} from './dto/update-building-location.dto';
+import {BuildingLocationsService} from './building-locations.service';
+import {ApiResponseHandler} from 'src/common/response-handler';
 
 @Controller('building-locations')
 export class BuildingLocationsController {
   constructor(private readonly buildingLocationsService: BuildingLocationsService) {}
 
   @Post()
-  create(@Body() createBuildingLocationDto: CreateBuildingLocationDto) {
-    return this.buildingLocationsService.create(createBuildingLocationDto);
+  async create(@Body() createBuildingLocationDto: CreateBuildingLocationDto) {
+    try {
+      const buildingLocation = await this.buildingLocationsService.create(createBuildingLocationDto);
+      return ApiResponseHandler.created('Building location created successfully', buildingLocation);
+    } catch (error) {
+      if (error.status === HttpStatus.NOT_FOUND) {
+        throw ApiResponseHandler.error(error);
+      }
+      throw ApiResponseHandler.error(new InternalServerErrorException('Failed to create building location'));
+    }
   }
 
   @Get()
-  findAll() {
-    return this.buildingLocationsService.findAll();
+  async findAll() {
+    try {
+      const buildingLocations = await this.buildingLocationsService.findAll();
+      return ApiResponseHandler.ok('Building locations retrieved successfully', buildingLocations);
+    } catch (error) {
+      throw ApiResponseHandler.error(new InternalServerErrorException('Failed to retrieve building locations'));
+    }
   }
 
   @Get(':id')
-  findOne(@Param('id', ParseIntPipe) id: number) {
-    return this.buildingLocationsService.findOne(id);
+  async findOne(@Param('id', ParseIntPipe) id: number) {
+    try {
+      const buildingLocation = await this.buildingLocationsService.findOne(id);
+      return ApiResponseHandler.ok('Building location retrieved successfully', buildingLocation);
+    } catch (error) {
+      if (error.status === HttpStatus.NOT_FOUND) {
+        throw ApiResponseHandler.error(error);
+      }
+      throw ApiResponseHandler.error(new InternalServerErrorException('Failed to retrieve building location'));
+    }
   }
 
   @Patch(':id')
-  update(@Param('id', ParseIntPipe) id: number, @Body() updateBuildingLocationDto: UpdateBuildingLocationDto) {
-    return this.buildingLocationsService.update(id, updateBuildingLocationDto);
+  async update(@Param('id', ParseIntPipe) id: number, @Body() updateBuildingLocationDto: UpdateBuildingLocationDto) {
+    try {
+      const updatedBuildingLocation = await this.buildingLocationsService.update(id, updateBuildingLocationDto);
+      return ApiResponseHandler.ok('Building location updated successfully', updatedBuildingLocation);
+    } catch (error) {
+      if (error.status === HttpStatus.NOT_FOUND) {
+        throw ApiResponseHandler.error(error);
+      }
+      throw ApiResponseHandler.error(new InternalServerErrorException('Failed to update building location'));
+    }
   }
 
   @Delete(':id')
-  remove(@Param('id', ParseIntPipe) id: number) {
-    return this.buildingLocationsService.remove(id);
+  async remove(@Param('id', ParseIntPipe) id: number) {
+    try {
+      const result = await this.buildingLocationsService.remove(id);
+      return ApiResponseHandler.ok('Building location deleted successfully', result);
+    } catch (error) {
+      if (error.status === HttpStatus.NOT_FOUND) {
+        throw ApiResponseHandler.error(error);
+      }
+      throw ApiResponseHandler.error(new InternalServerErrorException('Failed to delete building location'));
+    }
   }
 }
