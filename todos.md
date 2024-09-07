@@ -2,7 +2,7 @@
 
 [x] design database
 
-[] validation request
+[x] validation request
 
 [] handle exception
 
