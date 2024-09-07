@@ -17,26 +17,33 @@ export class BuildingLocationsService {
   ) { }
   async create(createBuildingLocationDto: CreateBuildingLocationDto) {
     try {
-      const { buildingId, parentLocationId, ...locationData } = createBuildingLocationDto;
-      const building = await this.buildingRepository.findOne({ where: { id: buildingId } });
-      if (!building) {
-        throw new Error('Building not found');
-      }
-      const parentLocation = parentLocationId ? await this.buildingLocationRepository.findOne({ where: { id: parentLocationId } }) : null;
+      const { buildingId, parentLocationId, ...bodyRequest } = createBuildingLocationDto;
+      const buildingLocation = this.buildingLocationRepository.create({ ...bodyRequest });
 
-      const buildingLocation = this.buildingLocationRepository.create({
-        ...locationData,
-        building,
-        parentLocation,
-      });
+      if(buildingId) {
+        const building = await this.buildingRepository.findOne({ where: { id: buildingId } });
+        if (!building) {
+          throw new Error('Building not found');
+        }
+        buildingLocation.building = building
+      }
+
+      if(parentLocationId) {
+        const parentLocation = await this.buildingLocationRepository.findOne({ where: { id: parentLocationId } });
+        if (!parentLocation) {
+          throw new Error('Parent location not found');
+        }
+        buildingLocation.parentLocation = parentLocation
+      }
+
       return this.buildingLocationRepository.save(buildingLocation);
     } catch (error) {
       throw new Error(error.message);
     }
   }
 
-  findAll() {
-    return this.buildingLocationRepository.find({ relations: ['building', 'parentLocation', 'childrenLocations'] });
+  async findAll() {
+    return await this.buildingLocationRepository.find({ relations: ['building', 'parentLocation', 'childrenLocations'] });
   }
 
   findOne(id: number) {
@@ -45,18 +52,25 @@ export class BuildingLocationsService {
 
   async update(id: number, updateBuildingLocationDto: UpdateBuildingLocationDto) {
     try {
-      const { buildingId, parentLocationId, ...locationData } = updateBuildingLocationDto;
-      const building = await this.buildingRepository.findOne({ where: { id: buildingId } });
-      if (!building) {
-        throw new Error('Building not found');
-      }
-      const parentLocation = parentLocationId ? await this.buildingLocationRepository.findOne({ where: { id: parentLocationId } }) : null;
+      const { buildingId, parentLocationId, ...bodyRequest } = updateBuildingLocationDto;
+      const buildingLocation = this.buildingLocationRepository.create({ ...bodyRequest });
 
-      const buildingLocation = this.buildingLocationRepository.create({
-        ...locationData,
-        building,
-        parentLocation,
-      });
+      if(buildingId) {
+        const building = await this.buildingRepository.findOne({ where: { id: buildingId } });
+        if (!building) {
+          throw new Error('Building not found');
+        }
+        buildingLocation.building = building
+      }
+
+      if(parentLocationId) {
+        const parentLocation = await this.buildingLocationRepository.findOne({ where: { id: parentLocationId } });
+        if (!parentLocation) {
+          throw new Error('Parent location not found');
+        }
+        buildingLocation.parentLocation = parentLocation
+      }
+
       return this.buildingLocationRepository.update(id, buildingLocation);
     } catch (error) {
       throw new Error(error.message);
