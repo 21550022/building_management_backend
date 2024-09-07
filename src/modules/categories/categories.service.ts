@@ -16,21 +16,14 @@ export class CategoriesService {
       const { parentCategoryId: parentId } = createCategoryDto
       const category = this.categoryRepository.create(createCategoryDto)
 
-      const trees = await this.categoryRepository.findTrees()
-      if (trees.length === 0) {
-        return await this.categoryRepository.save(category)
-      }
-      if(!parentId) {
-        const trees = await this.categoryRepository.findTrees()
-        trees.push(category)
-        return await this.categoryRepository.save(trees)
+      if(parentId) {
+        const parent = await this.categoryRepository.findOneBy({ id: parentId })
+        if(!parent) {
+          throw new Error('Parent category not found')
+        }
+        category.parent = parent
       }
 
-      const parent = parentId ? await this.categoryRepository.findOneBy({ id: parentId }) : null
-      if (!parent) {
-        throw new Error('Parent category not found')
-      }
-      category.parent = parent
       return await this.categoryRepository.save(category)
     } catch (error) {
       throw new Error(error)
@@ -48,13 +41,17 @@ export class CategoriesService {
   async update(id: number, updateCategoryDto: UpdateCategoryDto) {
     try {
       const { parentCategoryId: parentId } = updateCategoryDto
-    const parent = parentId ? await this.categoryRepository.findOneBy({id: parentId}) : null
-    if(!parent) {
-      throw new Error('Parent category not found')
-    }
-    const category = this.categoryRepository.create(updateCategoryDto)
-    category.parent = parent
-    return await this.categoryRepository.update(id, category)
+      const category = this.categoryRepository.create(updateCategoryDto)
+
+      if(parentId) {
+        const parent = await this.categoryRepository.findOneBy({ id: parentId })
+        if(!parent) {
+          throw new Error('Parent category not found')
+        }
+        category.parent = parent
+      }
+
+      return await this.categoryRepository.update(id, category)
     } catch (error) {
       throw new Error(error)
     }
