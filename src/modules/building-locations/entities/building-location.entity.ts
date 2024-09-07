@@ -1,5 +1,5 @@
 import { Building } from 'src/modules/buildings/entities/building.entity';
-import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn, Tree } from 'typeorm';
 
 @Entity()
 export class BuildingLocation {
