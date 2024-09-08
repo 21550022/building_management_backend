@@ -4,7 +4,7 @@
 
 [x] validation request
 
-[] handle exception
+[x] handle exception
 
 [] implement logging
 
