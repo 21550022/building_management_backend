@@ -1,4 +1,4 @@
-import {Module} from '@nestjs/common';
+import {MiddlewareConsumer, Module, NestModule} from '@nestjs/common';
 import {AppController} from './app.controller';
 import {AppService} from './app.service';
 import {TypeOrmModule,TypeOrmModuleOptions} from '@nestjs/typeorm';
@@ -6,6 +6,7 @@ import {UsersModule} from './modules/users/users.module';
 import {BuildingsModule} from './modules/buildings/buildings.module';
 import {BuildingLocationsModule} from './modules/building-locations/building-locations.module';
 import {CategoriesModule} from './modules/categories/categories.module';
+import {TraceIdMiddleware} from './middlewares/trace-id/trace-id.middleware';
 
 
 const dataSourceOptions: TypeOrmModuleOptions = {
@@ -30,4 +31,10 @@ const dataSourceOptions: TypeOrmModuleOptions = {
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer
+      .apply(TraceIdMiddleware)
+      .forRoutes('*');
+  }
+}
