@@ -4,7 +4,9 @@ import {UpdateBuildingLocationDto} from './dto/update-building-location.dto';
 import {BuildingLocationsService} from './building-locations.service';
 import {ApiResponseHandler} from 'src/common/response-handler';
 import {CustomLoggerService} from 'src/common/services/custom-logger/custom-logger.service';
+import {ApiBody, ApiOperation, ApiParam, ApiTags} from '@nestjs/swagger';
 
+@ApiTags('buildings locations')
 @Controller('building-locations')
 export class BuildingLocationsController {
   constructor(
@@ -12,6 +14,9 @@ export class BuildingLocationsController {
     private readonly logger: CustomLoggerService,
   ) {}
 
+
+  @ApiOperation({ summary: 'create new building location' })
+  @ApiBody({ required: true, type: CreateBuildingLocationDto })
   @Post()
   async create(@Body() createBuildingLocationDto: CreateBuildingLocationDto, @Req() req: Request) {
     const traceId = req.headers['x-trace-id'];
@@ -28,7 +33,7 @@ export class BuildingLocationsController {
       throw ApiResponseHandler.error(new InternalServerErrorException('Failed to create building location'));
     }
   }
-
+  @ApiOperation({ summary: 'get all building locations' })
   @Get()
   async findAll(@Req() req: Request) {
     const traceId = req.headers['x-trace-id'];
@@ -41,6 +46,8 @@ export class BuildingLocationsController {
     }
   }
 
+  @ApiOperation({ summary: 'get building location by id' })
+  @ApiParam({required: true, name: 'id', description: 'Building Location ID', example: 1})
   @Get(':id')
   async findOne(@Param('id', ParseIntPipe) id: number, @Req() req: Request) {
     const traceId = req.headers['x-trace-id'];
@@ -58,6 +65,9 @@ export class BuildingLocationsController {
     }
   }
 
+  @ApiOperation({ summary: 'update building location' })
+  @ApiParam({ name: 'id', description: 'Building Location ID', example: 1 })
+  @ApiBody({ required: true, type: UpdateBuildingLocationDto })
   @Patch(':id')
   async update(@Param('id', ParseIntPipe) id: number, @Body() updateBuildingLocationDto: UpdateBuildingLocationDto, @Req() req: Request) {
     const traceId = req.headers['x-trace-id'];
@@ -75,6 +85,8 @@ export class BuildingLocationsController {
     }
   }
 
+  @ApiOperation({ summary: 'delete building location' })
+  @ApiParam({ name: 'id', description: 'Building Location ID', example: 1 })
   @Delete(':id')
   async remove(@Param('id', ParseIntPipe) id: number, @Req() req: Request) {
     const traceId = req.headers['x-trace-id'];
