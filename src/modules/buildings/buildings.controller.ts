@@ -1,12 +1,13 @@
-import {Controller, Post, Get, Patch, Delete, Body, Param, ParseIntPipe, HttpStatus, InternalServerErrorException, Req} from '@nestjs/common';
+import {Controller, Post, Get, Patch, Delete, Body, Param, ParseIntPipe, HttpStatus, InternalServerErrorException, Req, NotFoundException} from '@nestjs/common';
 import {CreateBuildingDto} from './dto/create-building.dto';
 import {UpdateBuildingDto} from './dto/update-building.dto';
 import {BuildingsService} from './buildings.service';
 import {ApiResponseHandler} from 'src/common/response-handler';
 import {CustomLoggerService} from 'src/common/services/custom-logger/custom-logger.service';
+import {ApiBody, ApiOperation, ApiParam, ApiTags} from '@nestjs/swagger';
 
 
-
+@ApiTags('buildings')
 @Controller('buildings')
 export class BuildingsController {
   constructor(
@@ -15,6 +16,18 @@ export class BuildingsController {
 
   ) {}
 
+
+  @ApiOperation({ summary: 'create new building' })
+  @ApiBody({
+    type: UpdateBuildingDto,
+    examples: {
+      'body': {
+        value: {
+          name: 'Building 1',
+        }
+      }
+    }
+  })
   @Post()
   async create(@Body() createBuildingDto: CreateBuildingDto, @Req() req: Request) {
     const traceId = req.headers['x-trace-id'];
@@ -28,6 +41,7 @@ export class BuildingsController {
     }
   }
 
+  @ApiOperation({ summary: 'get all buildings' })
   @Get()
   async findAll(@Req() req: Request) {
     const traceId = req.headers['x-trace-id'];
@@ -41,6 +55,8 @@ export class BuildingsController {
     }
   }
 
+  @ApiOperation({ summary: 'get building by id' })
+  @ApiParam({ name: 'id', description: 'Building ID', example: 1 })
   @Get(':id')
   async findOne(@Param('id', ParseIntPipe) id: number, @Req() req: Request) {
     const traceId = req.headers['x-trace-id'];
@@ -58,13 +74,29 @@ export class BuildingsController {
     }
   }
 
+  @ApiOperation({ summary: 'update building by id' })
+  @ApiBody({
+    type: UpdateBuildingDto,
+    examples: {
+      'body': {
+        value: {
+          name: 'Building 1',
+        }
+      }
+    }
+  })
+  @ApiParam({ name: 'id', description: 'Building ID', example: 1 })
   @Patch(':id')
   async update(@Param('id', ParseIntPipe) id: number, @Body() updateBuildingDto: UpdateBuildingDto, @Req() req: Request) {
     const traceId = req.headers['x-trace-id'];
     try {
       const building = await this.buildingsService.findOne(id);
+      if(!building) {
+        throw ApiResponseHandler.error(new NotFoundException('Building not found'));
+      }
+      await this.buildingsService.update(id, updateBuildingDto);
       this.logger.log('Building retrieved successfully');
-      return building;
+      return ApiResponseHandler.ok('Building updated successfully');
     } catch (error) {
       if (error.status === HttpStatus.NOT_FOUND) {
         this.logger.error('Building not found', { traceId, buildingId: id });
@@ -75,6 +107,8 @@ export class BuildingsController {
     }
   }
 
+  @ApiOperation({ summary: 'delete building by id' })
+  @ApiParam({ name: 'id', description: 'Building ID', example: 1 })
   @Delete(':id')
   async remove(@Param('id', ParseIntPipe) id: number, @Req() req: Request) {
     const traceId = req.headers['x-trace-id'];
