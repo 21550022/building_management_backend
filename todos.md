@@ -6,6 +6,6 @@
 
 [x] handle exception
 
-[] implement logging
+[x] implement logging
 
 [] clean code & docs
