@@ -18,16 +18,7 @@ export class BuildingsController {
 
 
   @ApiOperation({ summary: 'create new building' })
-  @ApiBody({
-    type: UpdateBuildingDto,
-    examples: {
-      'body': {
-        value: {
-          name: 'Building 1',
-        }
-      }
-    }
-  })
+  @ApiBody({ required: true, type: CreateBuildingDto })
   @Post()
   async create(@Body() createBuildingDto: CreateBuildingDto, @Req() req: Request) {
     const traceId = req.headers['x-trace-id'];
@@ -56,7 +47,7 @@ export class BuildingsController {
   }
 
   @ApiOperation({ summary: 'get building by id' })
-  @ApiParam({ name: 'id', description: 'Building ID', example: 1 })
+  @ApiParam({required: true, name: 'id', description: 'Building ID', example: 1 })
   @Get(':id')
   async findOne(@Param('id', ParseIntPipe) id: number, @Req() req: Request) {
     const traceId = req.headers['x-trace-id'];
@@ -75,16 +66,7 @@ export class BuildingsController {
   }
 
   @ApiOperation({ summary: 'update building by id' })
-  @ApiBody({
-    type: UpdateBuildingDto,
-    examples: {
-      'body': {
-        value: {
-          name: 'Building 1',
-        }
-      }
-    }
-  })
+  @ApiBody({ required: true, type: UpdateBuildingDto })
   @ApiParam({ name: 'id', description: 'Building ID', example: 1 })
   @Patch(':id')
   async update(@Param('id', ParseIntPipe) id: number, @Body() updateBuildingDto: UpdateBuildingDto, @Req() req: Request) {
@@ -108,7 +90,7 @@ export class BuildingsController {
   }
 
   @ApiOperation({ summary: 'delete building by id' })
-  @ApiParam({ name: 'id', description: 'Building ID', example: 1 })
+  @ApiParam({ required: true, name: 'id', description: 'Building ID', example: 1 })
   @Delete(':id')
   async remove(@Param('id', ParseIntPipe) id: number, @Req() req: Request) {
     const traceId = req.headers['x-trace-id'];
