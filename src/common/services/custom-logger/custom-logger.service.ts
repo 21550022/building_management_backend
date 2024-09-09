@@ -1,6 +1,6 @@
 import {Injectable, LoggerService, Logger} from '@nestjs/common';
 import {WinstonModule} from 'nest-winston';
-import {loggerOption} from 'src/configs/logger.config';
+import {loggerOption} from 'src/config/logger.config';
 
 
 

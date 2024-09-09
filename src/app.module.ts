@@ -6,13 +6,19 @@ import {BuildingsModule} from './modules/buildings/buildings.module';
 import {BuildingLocationsModule} from './modules/building-locations/building-locations.module';
 import {TraceIdMiddleware} from './middlewares/trace-id/trace-id.middleware';
 import {WinstonModule} from 'nest-winston';
-import {loggerOption} from './configs/logger.config';
-import {dataSourceOptions} from './configs/database.config';
+import {loggerOption} from './config/logger.config';
+import {dataSourceOptions} from './config/database.config';
+import {ConfigModule} from '@nestjs/config';
+import configuration from './config/configuration';
 
 
 
 @Module({
   imports: [
+    ConfigModule.forRoot({
+      load: [configuration],
+      isGlobal: true,
+    }),
     WinstonModule.forRoot(loggerOption),
     TypeOrmModule.forRoot(dataSourceOptions),
     BuildingsModule,
