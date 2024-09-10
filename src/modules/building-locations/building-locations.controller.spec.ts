@@ -1,6 +1,11 @@
 import { Test, TestingModule } from '@nestjs/testing';
+import { getRepositoryToken } from '@nestjs/typeorm';
 import { BuildingLocationsController } from './building-locations.controller';
 import { BuildingLocationsService } from './building-locations.service';
+import { BuildingLocation } from './entities/building-location.entity';
+import { Repository } from 'typeorm';
+import { Building } from '../buildings/entities/building.entity';
+import { CustomLoggerService } from 'src/common/services/custom-logger/custom-logger.service';
 
 describe('BuildingLocationsController', () => {
   let controller: BuildingLocationsController;
@@ -8,7 +13,19 @@ describe('BuildingLocationsController', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [BuildingLocationsController],
-      providers: [BuildingLocationsService],
+      providers: [
+        BuildingLocationsService,
+        CustomLoggerService,
+        {
+          provide: getRepositoryToken(BuildingLocation),
+          useClass: Repository, // Sử dụng token cho BuildingLocationRepository
+        },
+        {
+          provide: getRepositoryToken(Building),
+          useClass: Repository, // Sử dụng token cho BuildingRepository
+        },
+
+      ],
     }).compile();
 
     controller = module.get<BuildingLocationsController>(BuildingLocationsController);
