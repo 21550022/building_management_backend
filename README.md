@@ -18,6 +18,7 @@ add **.env** file in the root of the project with the following content
 APP_HOST=localhost
 APP_PORT=3000
 
+DB_TYPE=postgres
 DB_HOST=localhost
 DB_PORT=5432
 DB_USERNAME=postgres
@@ -35,6 +36,13 @@ $ npm install
 
 ```bash
 docker run --name some-postgres -e POSTGRES_PASSWORD=postgres -p 5432:5432 -d postgres
+
+# migration
+npm run migration:generate --name=<name>
+npm run migration:run
+npm run migration:revert
+npm run migration:show
+
 ```
 
 ## Compile and run the project
