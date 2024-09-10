@@ -18,6 +18,7 @@ import configuration from './config/configuration';
     ConfigModule.forRoot({
       load: [configuration],
       isGlobal: true,
+      envFilePath: ['.env'],
     }),
     WinstonModule.forRoot(loggerOption),
     TypeOrmModule.forRoot(dataSourceOptions),

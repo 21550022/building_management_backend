@@ -28,7 +28,7 @@ class DatabaseStream extends Writable {
 
   async _write(info: any, encoding: string, callback: (error?: Error | null) => void) {
     try {
-      this.removeLimitedRecord();
+      await this.removeLimitedRecord();
       const { level, message, timestamp, ...meta } = info;
       const log = this.applogRepository.create({ level, message, timestamp, meta: JSON.stringify(meta) == '{}' ? null : JSON.stringify(meta) });
       await this.applogRepository.save(log);

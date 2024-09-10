@@ -1,9 +1,12 @@
 import {TypeOrmModuleOptions} from '@nestjs/typeorm';
 import {AppLog} from 'src/helpers/app-log/app-log.entity';
-import {loadYamlConfig} from 'src/utils/loadYamlConfig';
+// import {loadYamlConfig} from 'src/utils/loadYamlConfig';
+import configuration from './configuration';
 
 
-const config = loadYamlConfig();
+// const config = loadYamlConfig();
+const config = configuration();
+
 
 export const dataSourceOptions: TypeOrmModuleOptions = {
   type: 'postgres',
