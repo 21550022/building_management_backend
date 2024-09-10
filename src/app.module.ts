@@ -7,9 +7,9 @@ import { BuildingLocationsModule } from './modules/building-locations/building-l
 import { TraceIdMiddleware } from './middlewares/trace-id/trace-id.middleware';
 import { WinstonModule } from 'nest-winston';
 import { loggerOption } from './config/logger.config';
-import { dataSourceOptions } from './config/database.config';
 import { ConfigModule } from '@nestjs/config';
 import configuration from './config/configuration';
+import { dataSourceOptions } from './config/database.config';
 
 @Module({
   imports: [
@@ -18,8 +18,8 @@ import configuration from './config/configuration';
       isGlobal: true,
       envFilePath: ['.env'],
     }),
-    WinstonModule.forRoot(loggerOption),
     TypeOrmModule.forRoot(dataSourceOptions),
+    WinstonModule.forRoot(loggerOption),
     BuildingsModule,
     BuildingLocationsModule,
   ],
