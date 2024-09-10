@@ -13,7 +13,6 @@ services:
       - app-network
   api:
     build: .
-    command: npm run start:prod
     volumes:
       - .:/app
     environment:
