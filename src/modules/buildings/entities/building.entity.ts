@@ -9,6 +9,6 @@ export class Building {
   @Column()
   name: string;
 
-  @OneToMany(() => BuildingLocation, location => location.building)
+  @OneToMany(() => BuildingLocation, (location) => location.building)
   locations: BuildingLocation[];
 }

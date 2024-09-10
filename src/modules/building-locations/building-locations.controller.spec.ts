@@ -18,17 +18,18 @@ describe('BuildingLocationsController', () => {
         CustomLoggerService,
         {
           provide: getRepositoryToken(BuildingLocation),
-          useClass: Repository, // Sử dụng token cho BuildingLocationRepository
+          useClass: Repository,
         },
         {
           provide: getRepositoryToken(Building),
-          useClass: Repository, // Sử dụng token cho BuildingRepository
+          useClass: Repository,
         },
-
       ],
     }).compile();
 
-    controller = module.get<BuildingLocationsController>(BuildingLocationsController);
+    controller = module.get<BuildingLocationsController>(
+      BuildingLocationsController,
+    );
   });
 
   it('should be defined', () => {

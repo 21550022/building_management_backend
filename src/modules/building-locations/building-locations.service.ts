@@ -1,10 +1,10 @@
-import {Injectable, NotFoundException} from '@nestjs/common';
-import {CreateBuildingLocationDto} from './dto/create-building-location.dto';
-import {UpdateBuildingLocationDto} from './dto/update-building-location.dto';
-import {InjectRepository} from '@nestjs/typeorm';
-import {BuildingLocation} from './entities/building-location.entity';
-import {Repository} from 'typeorm';
-import {Building} from '../buildings/entities/building.entity';
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { CreateBuildingLocationDto } from './dto/create-building-location.dto';
+import { UpdateBuildingLocationDto } from './dto/update-building-location.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { BuildingLocation } from './entities/building-location.entity';
+import { Repository } from 'typeorm';
+import { Building } from '../buildings/entities/building.entity';
 
 @Injectable()
 export class BuildingLocationsService {
@@ -17,11 +17,16 @@ export class BuildingLocationsService {
   ) {}
 
   async create(createBuildingLocationDto: CreateBuildingLocationDto) {
-    const {buildingId, parentLocationId, ...bodyRequest} = createBuildingLocationDto;
-    const buildingLocation = this.buildingLocationRepository.create({...bodyRequest});
+    const { buildingId, parentLocationId, ...bodyRequest } =
+      createBuildingLocationDto;
+    const buildingLocation = this.buildingLocationRepository.create({
+      ...bodyRequest,
+    });
 
     if (buildingId) {
-      const building = await this.buildingRepository.findOne({where: {id: buildingId}});
+      const building = await this.buildingRepository.findOne({
+        where: { id: buildingId },
+      });
 
       if (!building) {
         throw new NotFoundException('Building not found');
@@ -30,7 +35,9 @@ export class BuildingLocationsService {
     }
 
     if (parentLocationId) {
-      const parentLocation = await this.buildingLocationRepository.findOne({where: {id: parentLocationId}});
+      const parentLocation = await this.buildingLocationRepository.findOne({
+        where: { id: parentLocationId },
+      });
       if (!parentLocation) {
         throw new NotFoundException('Parent location not found');
       }
@@ -41,26 +48,39 @@ export class BuildingLocationsService {
   }
 
   async findAll() {
-    return await this.buildingLocationRepository.find({relations: ['building', 'parentLocation', 'childrenLocations']});
+    return await this.buildingLocationRepository.find({
+      relations: ['building', 'parentLocation', 'childrenLocations'],
+    });
   }
 
   async findOne(id: number) {
-    const buildingLocation = await this.buildingLocationRepository.findOne({where: {id}, relations: ['building', 'parentLocation', 'childrenLocations']});
+    const buildingLocation = await this.buildingLocationRepository.findOne({
+      where: { id },
+      relations: ['building', 'parentLocation', 'childrenLocations'],
+    });
     if (!buildingLocation) {
       throw new NotFoundException(`Building location with ID ${id} not found`);
     }
     return buildingLocation;
   }
 
-  async update(id: number, updateBuildingLocationDto: UpdateBuildingLocationDto) {
-    const {buildingId, parentLocationId, ...bodyRequest} = updateBuildingLocationDto;
-    const buildingLocation = await this.buildingLocationRepository.findOne({where: {id}});
+  async update(
+    id: number,
+    updateBuildingLocationDto: UpdateBuildingLocationDto,
+  ) {
+    const { buildingId, parentLocationId, ...bodyRequest } =
+      updateBuildingLocationDto;
+    const buildingLocation = await this.buildingLocationRepository.findOne({
+      where: { id },
+    });
     if (!buildingLocation) {
       throw new NotFoundException(`Building location with ID ${id} not found`);
     }
 
     if (buildingId) {
-      const building = await this.buildingRepository.findOne({where: {id: buildingId}});
+      const building = await this.buildingRepository.findOne({
+        where: { id: buildingId },
+      });
       if (!building) {
         throw new NotFoundException('Building not found');
       }
@@ -68,7 +88,9 @@ export class BuildingLocationsService {
     }
 
     if (parentLocationId) {
-      const parentLocation = await this.buildingLocationRepository.findOne({where: {id: parentLocationId}});
+      const parentLocation = await this.buildingLocationRepository.findOne({
+        where: { id: parentLocationId },
+      });
       if (!parentLocation) {
         throw new NotFoundException('Parent location not found');
       }
@@ -80,7 +102,9 @@ export class BuildingLocationsService {
   }
 
   async remove(id: number) {
-    const buildingLocation = await this.buildingLocationRepository.findOne({where: {id}});
+    const buildingLocation = await this.buildingLocationRepository.findOne({
+      where: { id },
+    });
     if (!buildingLocation) {
       throw new NotFoundException(`Building location with ID ${id} not found`);
     }

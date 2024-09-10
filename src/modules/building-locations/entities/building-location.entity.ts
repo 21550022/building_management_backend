@@ -1,5 +1,11 @@
 import { Building } from 'src/modules/buildings/entities/building.entity';
-import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn, Tree } from 'typeorm';
+import {
+  Column,
+  Entity,
+  ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity()
 export class BuildingLocation {
@@ -15,10 +21,10 @@ export class BuildingLocation {
   @Column({ type: 'numeric', precision: 10, scale: 3, nullable: false })
   area: number;
 
-  @ManyToOne(() => BuildingLocation, location => location.childrenLocations)
+  @ManyToOne(() => BuildingLocation, (location) => location.childrenLocations)
   parentLocation: BuildingLocation;
 
-  @OneToMany(() => BuildingLocation, location => location.parentLocation)
+  @OneToMany(() => BuildingLocation, (location) => location.parentLocation)
   childrenLocations: BuildingLocation[];
 
   @ManyToOne(() => Building)

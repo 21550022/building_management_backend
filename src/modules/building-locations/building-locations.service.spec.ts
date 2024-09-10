@@ -1,9 +1,9 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { BuildingLocationsService } from './building-locations.service';
-import {getRepositoryToken} from '@nestjs/typeorm';
-import {BuildingLocation} from './entities/building-location.entity';
-import {Repository} from 'typeorm';
-import {Building} from '../buildings/entities/building.entity';
+import { getRepositoryToken } from '@nestjs/typeorm';
+import { BuildingLocation } from './entities/building-location.entity';
+import { Repository } from 'typeorm';
+import { Building } from '../buildings/entities/building.entity';
 
 describe('BuildingLocationsService', () => {
   let service: BuildingLocationsService;

@@ -1,9 +1,9 @@
-import {Injectable, NotFoundException} from '@nestjs/common';
-import {CreateBuildingDto} from './dto/create-building.dto';
-import {UpdateBuildingDto} from './dto/update-building.dto';
-import {InjectRepository} from '@nestjs/typeorm';
-import {Building} from './entities/building.entity';
-import {Repository} from 'typeorm';
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { CreateBuildingDto } from './dto/create-building.dto';
+import { UpdateBuildingDto } from './dto/update-building.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Building } from './entities/building.entity';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class BuildingsService {
@@ -21,10 +21,10 @@ export class BuildingsService {
 
   async findOne(id: number) {
     const building = await this.buildingsRepository.findOne({ where: { id } });
-      if (!building) {
-        throw new NotFoundException(`Building with ID ${id} not found`);
-      }
-      return this.buildingsRepository.findOne({ where: { id } });
+    if (!building) {
+      throw new NotFoundException(`Building with ID ${id} not found`);
+    }
+    return this.buildingsRepository.findOne({ where: { id } });
   }
 
   update(id: number, updateBuildingDto: UpdateBuildingDto) {

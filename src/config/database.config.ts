@@ -1,10 +1,8 @@
-import {TypeOrmModuleOptions} from '@nestjs/typeorm';
-import {AppLog} from 'src/helpers/app-log/app-log.entity';
+import { TypeOrmModuleOptions } from '@nestjs/typeorm';
+import { AppLog } from 'src/helpers/app-log/app-log.entity';
 import configuration from './configuration';
 
-
 const config = configuration();
-
 
 export const dataSourceOptions: TypeOrmModuleOptions = {
   type: 'postgres',
@@ -16,4 +14,4 @@ export const dataSourceOptions: TypeOrmModuleOptions = {
   entities: [AppLog],
   synchronize: true,
   autoLoadEntities: true,
-}
+};

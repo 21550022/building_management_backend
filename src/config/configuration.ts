@@ -1,4 +1,4 @@
-import {configDotenv} from 'dotenv';
+import { configDotenv } from 'dotenv';
 
 configDotenv();
 
@@ -13,5 +13,5 @@ export default () => ({
     username: process.env.DB_USERNAME,
     password: process.env.DB_PASSWORD,
     name: process.env.DB_NAME,
-  }
+  },
 });

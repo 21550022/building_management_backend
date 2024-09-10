@@ -1,7 +1,7 @@
-import {HttpException, HttpStatus} from '@nestjs/common';
+import { HttpException, HttpStatus } from '@nestjs/common';
 
 export class ApiResponseHandler {
-  static ok<D>(message: string, data: D|D[]=null) {
+  static ok<D>(message: string, data: D | D[] = null) {
     return {
       message,
       status: HttpStatus.OK,
@@ -9,7 +9,7 @@ export class ApiResponseHandler {
     };
   }
 
-  static created<D>(message: string, data: D=null) {
+  static created<D>(message: string, data: D = null) {
     return {
       message,
       status: HttpStatus.CREATED,

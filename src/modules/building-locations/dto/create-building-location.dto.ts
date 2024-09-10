@@ -1,5 +1,5 @@
-import {ApiProperty, ApiPropertyOptional} from '@nestjs/swagger';
-import {IsNotEmpty, IsNumber, IsOptional, IsString} from 'class-validator';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
 
 export class CreateBuildingLocationDto {
   @ApiProperty({ description: 'Name of the location' })

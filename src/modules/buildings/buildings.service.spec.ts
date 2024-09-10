@@ -1,8 +1,8 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { BuildingsService } from './buildings.service';
-import {getRepositoryToken} from '@nestjs/typeorm';
-import {Building} from './entities/building.entity';
-import {Repository} from 'typeorm';
+import { getRepositoryToken } from '@nestjs/typeorm';
+import { Building } from './entities/building.entity';
+import { Repository } from 'typeorm';
 
 describe('BuildingsService', () => {
   let service: BuildingsService;

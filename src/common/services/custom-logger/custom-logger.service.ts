@@ -1,11 +1,12 @@
-import {Injectable, LoggerService, Logger} from '@nestjs/common';
-import {WinstonModule} from 'nest-winston';
-import {loggerOption} from 'src/config/logger.config';
-
-
+import { Injectable, LoggerService } from '@nestjs/common';
+import { WinstonModule } from 'nest-winston';
+import { loggerOption } from 'src/config/logger.config';
 
 @Injectable()
-export class CustomLoggerService extends WinstonModule implements LoggerService {
+export class CustomLoggerService
+  extends WinstonModule
+  implements LoggerService
+{
   private readonly logger: LoggerService;
 
   constructor() {

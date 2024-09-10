@@ -2,8 +2,6 @@ import { Writable } from 'stream';
 import { DataSource, LessThan, Repository } from 'typeorm';
 import { AppLog } from './app-log.entity';
 
-
-
 class DatabaseStream extends Writable {
   private applogRepository: Repository<AppLog>;
   private dataSource: DataSource;
@@ -26,11 +24,20 @@ class DatabaseStream extends Writable {
     }
   }
 
-  async _write(info: any, encoding: string, callback: (error?: Error | null) => void) {
+  async _write(
+    info: any,
+    encoding: string,
+    callback: (error?: Error | null) => void,
+  ) {
     try {
       await this.removeLimitedRecord();
       const { level, message, timestamp, ...meta } = info;
-      const log = this.applogRepository.create({ level, message, timestamp, meta: JSON.stringify(meta) == '{}' ? null : JSON.stringify(meta) });
+      const log = this.applogRepository.create({
+        level,
+        message,
+        timestamp,
+        meta: JSON.stringify(meta) == '{}' ? null : JSON.stringify(meta),
+      });
       await this.applogRepository.save(log);
       await this.deleteOldLogs();
       callback();
@@ -46,7 +53,9 @@ class DatabaseStream extends Writable {
     dateThreshold.setDate(dateThreshold.getDate() - retentionPeriod);
 
     try {
-      await this.applogRepository.delete({ timestamp: LessThan(dateThreshold) });
+      await this.applogRepository.delete({
+        timestamp: LessThan(dateThreshold),
+      });
     } catch (error) {
       console.error('Error deleting old logs:', error);
     }
