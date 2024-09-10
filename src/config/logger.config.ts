@@ -1,7 +1,6 @@
 import { WinstonModuleOptions } from 'nest-winston';
 import { format, transports } from 'winston';
 import * as DailyRotateFile from 'winston-daily-rotate-file';
-import { dataSourceOptions } from './database.config';
 import DatabaseStream from 'src/helpers/app-log/database-stream';
 
 const logFilePath = './logs/server-%DATE%.log';
@@ -44,7 +43,7 @@ export const loggerOption: WinstonModuleOptions = {
       level: 'error',
     }),
     new transports.Stream({
-      stream: new DatabaseStream(dataSourceOptions),
+      stream: new DatabaseStream(),
     }),
   ],
 };

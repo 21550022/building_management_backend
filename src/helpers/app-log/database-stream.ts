@@ -1,26 +1,26 @@
 import { Writable } from 'stream';
 import { DataSource, LessThan, Repository } from 'typeorm';
 import { AppLog } from './app-log.entity';
+import { datasource } from 'src/config/database.config';
+import { InternalServerErrorException } from '@nestjs/common';
 
 class DatabaseStream extends Writable {
   private applogRepository: Repository<AppLog>;
-  private dataSource: DataSource;
+  private dataSource: DataSource = datasource;
   maxRecords: number;
 
-  constructor(options: any, maxRecords: number = 1000) {
+  constructor(maxRecords: number = 1000) {
     super({ objectMode: true });
     this.maxRecords = maxRecords;
-    this.initDatabase(options);
+    this.initDatabase();
   }
 
-  private async initDatabase(options: any) {
+  private async initDatabase() {
     try {
-      this.dataSource = new DataSource(options);
-
       await this.dataSource.initialize();
       this.applogRepository = this.dataSource.getRepository(AppLog);
     } catch (error) {
-      console.error('Error initializing database:', error);
+      throw new InternalServerErrorException('Database connection interrupted');
     }
   }
 
