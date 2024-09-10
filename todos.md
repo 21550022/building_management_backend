@@ -8,4 +8,4 @@
 
 [x] implement logging
 
-[] clean code & docs
+[x] clean code & docs
