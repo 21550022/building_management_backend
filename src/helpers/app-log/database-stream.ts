@@ -31,11 +31,10 @@ class DatabaseStream extends Writable {
   ) {
     try {
       await this.removeLimitedRecord();
-      const { level, message, timestamp, ...meta } = info;
+      const { level, message, ...meta } = info;
       const log = this.applogRepository.create({
         level,
         message,
-        timestamp,
         meta: JSON.stringify(meta) == '{}' ? null : JSON.stringify(meta),
       });
       await this.applogRepository.save(log);
