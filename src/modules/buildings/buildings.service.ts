@@ -12,7 +12,8 @@ export class BuildingsService {
     private buildingsRepository: Repository<Building>,
   ) {}
   async create(createBuildingDto: CreateBuildingDto) {
-    return this.buildingsRepository.save(createBuildingDto);
+    const building = this.buildingsRepository.create(createBuildingDto);
+    return this.buildingsRepository.save(building);
   }
 
   findAll() {
@@ -20,26 +21,23 @@ export class BuildingsService {
   }
 
   async findOne(id: number) {
-    const building = await this.buildingsRepository.findOne({ where: { id } });
+    const building = await this.buildingsRepository.findOneBy({ id });
     if (!building) {
       throw new NotFoundException(`Building with ID ${id} not found`);
     }
-    return this.buildingsRepository.findOne({ where: { id } });
+    return building;
   }
 
-  update(id: number, updateBuildingDto: UpdateBuildingDto) {
-    const building = this.buildingsRepository.findOne({ where: { id } });
-    if (!building) {
-      throw new NotFoundException(`Building with ID ${id} not found`);
-    }
-    return this.buildingsRepository.update(id, updateBuildingDto);
+  async update(id: number, updateBuildingDto: UpdateBuildingDto) {
+    const building = this.buildingsRepository.create({
+      id,
+      ...updateBuildingDto,
+    });
+    return await this.buildingsRepository.update(id, building);
   }
 
-  remove(id: number) {
-    const building = this.buildingsRepository.findOne({ where: { id } });
-    if (!building) {
-      throw new NotFoundException(`Building with ID ${id} not found`);
-    }
-    return this.buildingsRepository.delete(id);
+  async remove(id: number) {
+    const building = await this.findOne(id);
+    return await this.buildingsRepository.remove(building);
   }
 }

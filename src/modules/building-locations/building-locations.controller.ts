@@ -15,7 +15,7 @@ import { CreateBuildingLocationDto } from './dto/create-building-location.dto';
 import { UpdateBuildingLocationDto } from './dto/update-building-location.dto';
 import { BuildingLocationsService } from './building-locations.service';
 import { ApiResponseHandler } from 'src/common/response-handler';
-import { CustomLoggerService } from 'src/common/services/custom-logger/custom-logger.service';
+// import { CustomLoggerService } from 'src/common/services/custom-logger/custom-logger.service';
 import { ApiBody, ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
 
 @ApiTags('buildings locations')
@@ -23,7 +23,7 @@ import { ApiBody, ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
 export class BuildingLocationsController {
   constructor(
     private readonly buildingLocationsService: BuildingLocationsService,
-    private readonly logger: CustomLoggerService,
+    // private readonly logger: CustomLoggerService,
   ) {}
 
   @ApiOperation({ summary: 'create new building location' })
@@ -38,20 +38,18 @@ export class BuildingLocationsController {
       const buildingLocation = await this.buildingLocationsService.create(
         createBuildingLocationDto,
       );
-      this.logger.log('Building location created successfully');
+      // this.logger.log('Building location created successfully');
       return ApiResponseHandler.created(
         'Building location created successfully',
         buildingLocation,
       );
     } catch (error) {
       if (error.status === HttpStatus.NOT_FOUND) {
-        this.logger.error('Building not found', { traceId });
+        // this.logger.error('Building not found', { traceId });
         throw ApiResponseHandler.error(error);
       }
-      this.logger.error('Failed to create building location', { traceId });
-      throw ApiResponseHandler.error(
-        new InternalServerErrorException('Failed to create building location'),
-      );
+      // this.logger.error(error?.response, { traceId });
+      throw ApiResponseHandler.error(error?.response);
     }
   }
   @ApiOperation({ summary: 'get all building locations' })
@@ -60,13 +58,13 @@ export class BuildingLocationsController {
     const traceId = req.headers['x-trace-id'];
     try {
       const buildingLocations = await this.buildingLocationsService.findAll();
-      this.logger.log('Building locations retrieved successfully');
+      // this.logger.log('Building locations retrieved successfully');
       return ApiResponseHandler.ok(
         'Building locations retrieved successfully',
         buildingLocations,
       );
     } catch (error) {
-      this.logger.error('Failed to retrieve building locations', { traceId });
+      // this.logger.error('Failed to retrieve building locations', { traceId });
       throw ApiResponseHandler.error(
         new InternalServerErrorException(
           'Failed to retrieve building locations',
@@ -87,28 +85,32 @@ export class BuildingLocationsController {
     const traceId = req.headers['x-trace-id'];
     try {
       const buildingLocation = await this.buildingLocationsService.findOne(id);
-      this.logger.log('Building location retrieved successfully');
+      // this.logger.log('Building location retrieved successfully');
       return ApiResponseHandler.ok(
         'Building location retrieved successfully',
         buildingLocation,
       );
     } catch (error) {
-      if (error.status === HttpStatus.NOT_FOUND) {
-        this.logger.error('Building location not found', {
-          traceId,
-          buildingLocationId: id,
-        });
-        throw ApiResponseHandler.error(error);
-      }
-      this.logger.error('Failed to retrieve building location', {
-        traceId,
-        buildingLocationId: id,
-      });
-      throw ApiResponseHandler.error(
-        new InternalServerErrorException(
-          'Failed to retrieve building location',
-        ),
-      );
+      console.log({ error });
+
+      // if (error.status === HttpStatus.NOT_FOUND) {
+      //   this.logger.error('Building location not found', {
+      //     traceId,
+      //     buildingLocationId: id,
+      //   });
+      //   throw ApiResponseHandler.error(error);
+      // }
+      // this.logger.error('Failed to retrieve building location', {
+      //   traceId,
+      //   buildingLocationId: id,
+      // });
+      // throw ApiResponseHandler.error(
+      //   new InternalServerErrorException(
+      //     'Failed to retrieve building location',
+      //   ),
+      // );
+      // this.logger.error(error, { traceId });
+      throw ApiResponseHandler.error(error);
     }
   }
 
@@ -128,23 +130,23 @@ export class BuildingLocationsController {
           id,
           updateBuildingLocationDto,
         );
-      this.logger.log('Building location updated successfully');
+      // this.logger.log('Building location updated successfully');
       return ApiResponseHandler.ok(
         'Building location updated successfully',
         updatedBuildingLocation,
       );
     } catch (error) {
       if (error.status === HttpStatus.NOT_FOUND) {
-        this.logger.error('Building location not found', {
-          traceId,
-          buildingLocationId: id,
-        });
+        // this.logger.error('Building location not found', {
+        //   traceId,
+        //   buildingLocationId: id,
+        // });
         throw ApiResponseHandler.error(error);
       }
-      this.logger.error('Failed to update building location', {
-        traceId,
-        buildingLocationId: id,
-      });
+      // this.logger.error('Failed to update building location', {
+      //   traceId,
+      //   buildingLocationId: id,
+      // });
       throw ApiResponseHandler.error(
         new InternalServerErrorException('Failed to update building location'),
       );
@@ -158,23 +160,23 @@ export class BuildingLocationsController {
     const traceId = req.headers['x-trace-id'];
     try {
       const ok = await this.buildingLocationsService.remove(id);
-      this.logger.log('Building location deleted successfully');
+      // this.logger.log('Building location deleted successfully');
       return ApiResponseHandler.ok(
         'Building location deleted successfully',
         ok,
       );
     } catch (error) {
       if (error.status === HttpStatus.NOT_FOUND) {
-        this.logger.error('Building location not found', {
-          traceId,
-          buildingLocationId: id,
-        });
+        // this.logger.error('Building location not found', {
+        //   traceId,
+        //   buildingLocationId: id,
+        // });
         throw ApiResponseHandler.error(error);
       }
-      this.logger.error('Failed to delete building location', {
-        traceId,
-        buildingLocationId: id,
-      });
+      // this.logger.error('Failed to delete building location', {
+      //   traceId,
+      //   buildingLocationId: id,
+      // });
       throw ApiResponseHandler.error(
         new InternalServerErrorException('Failed to delete building location'),
       );

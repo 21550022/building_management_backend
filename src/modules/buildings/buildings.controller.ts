@@ -7,16 +7,13 @@ import {
   Body,
   Param,
   ParseIntPipe,
-  HttpStatus,
-  InternalServerErrorException,
   Req,
-  NotFoundException,
 } from '@nestjs/common';
 import { CreateBuildingDto } from './dto/create-building.dto';
 import { UpdateBuildingDto } from './dto/update-building.dto';
 import { BuildingsService } from './buildings.service';
 import { ApiResponseHandler } from 'src/common/response-handler';
-import { CustomLoggerService } from 'src/common/services/custom-logger/custom-logger.service';
+// import { CustomLoggerService } from 'src/common/services/custom-logger/custom-logger.service';
 import { ApiBody, ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
 
 @ApiTags('buildings')
@@ -24,7 +21,7 @@ import { ApiBody, ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
 export class BuildingsController {
   constructor(
     private readonly buildingsService: BuildingsService,
-    private readonly logger: CustomLoggerService,
+    // private readonly logger: CustomLoggerService,
   ) {}
 
   @ApiOperation({ summary: 'create new building' })
@@ -37,16 +34,14 @@ export class BuildingsController {
     const traceId = req.headers['x-trace-id'];
     try {
       const building = await this.buildingsService.create(createBuildingDto);
-      this.logger.log('Building created successfully');
+      // this.logger.log('Building created successfully');
       return ApiResponseHandler.created(
         'Building created successfully',
         building,
       );
     } catch (error) {
-      this.logger.error('Failed to create building', { traceId });
-      throw ApiResponseHandler.error(
-        new InternalServerErrorException('Failed to create building'),
-      );
+      // this.logger.error(error, { traceId });
+      throw error;
     }
   }
 
@@ -56,16 +51,14 @@ export class BuildingsController {
     const traceId = req.headers['x-trace-id'];
     try {
       const buildings = await this.buildingsService.findAll();
-      this.logger.log('Buildings retrieved successfully');
+      // this.logger.log('Buildings retrieved successfully');
       return ApiResponseHandler.ok(
         'Buildings retrieved successfully',
         buildings,
       );
     } catch (error) {
-      this.logger.error('Failed to retrieve buildings', { traceId });
-      throw ApiResponseHandler.error(
-        new InternalServerErrorException('Failed to retrieve buildings'),
-      );
+      // this.logger.error(error, { traceId });
+      throw error;
     }
   }
 
@@ -81,20 +74,14 @@ export class BuildingsController {
     const traceId = req.headers['x-trace-id'];
     try {
       const building = await this.buildingsService.findOne(id);
-      this.logger.log('Buildings retrieved successfully');
+      // this.logger.log('Buildings retrieved successfully');
       return ApiResponseHandler.ok('Building retrieved successfully', building);
     } catch (error) {
-      if (error.status === HttpStatus.NOT_FOUND) {
-        this.logger.error('Building not found', { traceId, buildingId: id });
-        throw ApiResponseHandler.error(error);
-      }
-      this.logger.error('Failed to retrieve building', {
-        traceId,
-        buildingId: id,
-      });
-      throw ApiResponseHandler.error(
-        new InternalServerErrorException('Failed to retrieve building'),
-      );
+      // this.logger.error(error, {
+      //   traceId,
+      //   buildingId: id,
+      // });
+      throw error;
     }
   }
 
@@ -109,27 +96,23 @@ export class BuildingsController {
   ) {
     const traceId = req.headers['x-trace-id'];
     try {
-      const building = await this.buildingsService.findOne(id);
-      if (!building) {
-        throw ApiResponseHandler.error(
-          new NotFoundException('Building not found'),
-        );
-      }
-      await this.buildingsService.update(id, updateBuildingDto);
-      this.logger.log('Building retrieved successfully');
-      return ApiResponseHandler.ok('Building updated successfully');
+      // const building = await this.buildingsService.findOne(id);
+      // if (!building) {
+      //   throw ApiResponseHandler.error(
+      //     new NotFoundException('Building not found'),
+      //   );
+      // }
+      const ok = await this.buildingsService.update(id, updateBuildingDto);
+
+      // this.logger.log('Building retrieved successfully');
+      // return ApiResponseHandler.ok('Building updated successfully');
     } catch (error) {
-      if (error.status === HttpStatus.NOT_FOUND) {
-        this.logger.error('Building not found', { traceId, buildingId: id });
-        throw ApiResponseHandler.error(error);
-      }
-      this.logger.error('Failed to retrieve building', {
-        traceId,
-        buildingId: id,
-      });
-      throw ApiResponseHandler.error(
-        new InternalServerErrorException('Failed to update building'),
-      );
+      // this.logger.error(error, {
+      //   traceId,
+      //   buildingId: id,
+      // });
+
+      throw error;
     }
   }
 
@@ -144,21 +127,15 @@ export class BuildingsController {
   async remove(@Param('id', ParseIntPipe) id: number, @Req() req: Request) {
     const traceId = req.headers['x-trace-id'];
     try {
-      const ok = await this.buildingsService.findOne(id);
-      this.logger.log('Building retrieved successfully');
-      return ok;
+      await this.buildingsService.remove(id);
+
+      // this.logger.log('Building retrieved successfully');
     } catch (error) {
-      if (error.status === HttpStatus.NOT_FOUND) {
-        this.logger.error('Building not found', { traceId, buildingId: id });
-        throw ApiResponseHandler.error(error);
-      }
-      this.logger.error('Failed to retrieve building', {
-        traceId,
-        buildingId: id,
-      });
-      throw ApiResponseHandler.error(
-        new InternalServerErrorException('Failed to delete building'),
-      );
+      // this.logger.error(error, {
+      //   traceId,
+      //   buildingId: id,
+      // });
+      throw error;
     }
   }
 }

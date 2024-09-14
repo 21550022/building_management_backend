@@ -5,7 +5,7 @@ import { BuildingLocationsService } from './building-locations.service';
 import { BuildingLocation } from './entities/building-location.entity';
 import { Repository } from 'typeorm';
 import { Building } from '../buildings/entities/building.entity';
-import { CustomLoggerService } from 'src/common/services/custom-logger/custom-logger.service';
+// import { CustomLoggerService } from 'src/common/services/custom-logger/custom-logger.service';
 
 describe('BuildingLocationsController', () => {
   let controller: BuildingLocationsController;
@@ -15,7 +15,7 @@ describe('BuildingLocationsController', () => {
       controllers: [BuildingLocationsController],
       providers: [
         BuildingLocationsService,
-        CustomLoggerService,
+        // CustomLoggerService,
         {
           provide: getRepositoryToken(BuildingLocation),
           useClass: Repository,
