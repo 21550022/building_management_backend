@@ -4,7 +4,7 @@ import { AppLoggerController } from './app-logger.controller';
 
 @Global()
 @Module({
-  controllers: [AppLoggerController],
+  controllers: [],
   providers: [AppLoggerService],
   exports: [AppLoggerService],
 })
