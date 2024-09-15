@@ -20,4 +20,5 @@ export const datasource = new DataSource({
 export const dataSourceOptions: TypeOrmModuleOptions = {
   ...datasource.options,
   autoLoadEntities: true,
+  // synchronize: true,
 };
