@@ -37,10 +37,7 @@ export class BuildingLocationsController {
     try {
       const buildingLocation = await this.buildingLocationsService.create(createBuildingLocationDto);
       // this.logger.log('Building location created successfully');
-      return ApiResponseHandler.created(
-        'Building location created successfully',
-        buildingLocation,
-      );
+      return ApiResponseHandler.created('Building location created successfully');
     } catch (error) {
 
       // this.logger.error(error?.response, { traceId });
@@ -54,10 +51,7 @@ export class BuildingLocationsController {
     try {
       const buildingLocations = await this.buildingLocationsService.findAll();
       // this.logger.log('Building locations retrieved successfully');
-      return ApiResponseHandler.ok(
-        'Building locations retrieved successfully',
-        buildingLocations,
-      );
+      return ApiResponseHandler.ok('Building locations retrieved successfully', buildingLocations);
     } catch (error) {
       // this.logger.error('Failed to retrieve building locations', { traceId });
       throw error;
@@ -77,10 +71,7 @@ export class BuildingLocationsController {
     try {
       const buildingLocation = await this.buildingLocationsService.findOne(id);
       // this.logger.log('Building location retrieved successfully');
-      return ApiResponseHandler.ok(
-        'Building location retrieved successfully',
-        buildingLocation,
-      );
+      return ApiResponseHandler.ok('Building location retrieved successfully', buildingLocation);
     } catch (error) {
       console.log({ error });
 
@@ -116,13 +107,9 @@ export class BuildingLocationsController {
   ) {
     const traceId = req.headers['x-trace-id'];
     try {
-      const updatedBuildingLocation =
-        await this.buildingLocationsService.update( id, updateBuildingLocationDto );
+      await this.buildingLocationsService.update( id, updateBuildingLocationDto );
       // this.logger.log('Building location updated successfully');
-      return ApiResponseHandler.ok(
-        'Building location updated successfully',
-        updatedBuildingLocation,
-      );
+      return ApiResponseHandler.ok('Building location updated successfully');
     } catch (error) {
       throw error;
     }
@@ -134,12 +121,9 @@ export class BuildingLocationsController {
   async remove(@Param('id', ParseIntPipe) id: number, @Req() req: Request) {
     const traceId = req.headers['x-trace-id'];
     try {
-      const ok = await this.buildingLocationsService.remove(id);
+      await this.buildingLocationsService.remove(id);
       // this.logger.log('Building location deleted successfully');
-      return ApiResponseHandler.ok(
-        'Building location deleted successfully',
-        ok,
-      );
+      return ApiResponseHandler.ok('Building location deleted successfully');
     } catch (error) {
       throw error;
     }

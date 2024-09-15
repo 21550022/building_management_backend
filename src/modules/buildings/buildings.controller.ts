@@ -33,12 +33,9 @@ export class BuildingsController {
   ) {
     const traceId = req.headers['x-trace-id'];
     try {
-      const building = await this.buildingsService.create(createBuildingDto);
+      await this.buildingsService.create(createBuildingDto);
       // this.logger.log('Building created successfully');
-      return ApiResponseHandler.created(
-        'Building created successfully',
-        building,
-      );
+      return ApiResponseHandler.created('Building created successfully');
     } catch (error) {
       // this.logger.error(error, { traceId });
       throw error;
@@ -102,10 +99,10 @@ export class BuildingsController {
       //     new NotFoundException('Building not found'),
       //   );
       // }
-      const ok = await this.buildingsService.update(id, updateBuildingDto);
+      await this.buildingsService.update(id, updateBuildingDto);
 
       // this.logger.log('Building retrieved successfully');
-      // return ApiResponseHandler.ok('Building updated successfully');
+      return ApiResponseHandler.ok(`Building with ID ${id} updated successfully`);
     } catch (error) {
       // this.logger.error(error, {
       //   traceId,
@@ -128,6 +125,7 @@ export class BuildingsController {
     const traceId = req.headers['x-trace-id'];
     try {
       await this.buildingsService.remove(id);
+      return ApiResponseHandler.ok(`Building with ID ${id} deleted successfully`);
 
       // this.logger.log('Building retrieved successfully');
     } catch (error) {
