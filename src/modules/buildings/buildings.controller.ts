@@ -13,15 +13,15 @@ import { CreateBuildingDto } from './dto/create-building.dto';
 import { UpdateBuildingDto } from './dto/update-building.dto';
 import { BuildingsService } from './buildings.service';
 import { ApiResponseHandler } from 'src/common/response-handler';
-// import { CustomLoggerService } from 'src/common/services/custom-logger/custom-logger.service';
 import { ApiBody, ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
+import { AppLoggerService } from '../app-logger/app-logger.service';
 
 @ApiTags('buildings')
 @Controller('buildings')
 export class BuildingsController {
   constructor(
     private readonly buildingsService: BuildingsService,
-    // private readonly logger: CustomLoggerService,
+    private readonly logger: AppLoggerService,
   ) {}
 
   @ApiOperation({ summary: 'create new building' })
@@ -34,10 +34,10 @@ export class BuildingsController {
     const traceId = req.headers['x-trace-id'];
     try {
       await this.buildingsService.create(createBuildingDto);
-      // this.logger.log('Building created successfully');
+      this.logger.log('Building created successfully');
       return ApiResponseHandler.created('Building created successfully');
     } catch (error) {
-      // this.logger.error(error, { traceId });
+      this.logger.error(error, {traceId, context: BuildingsController.name});
       throw error;
     }
   }
@@ -48,13 +48,10 @@ export class BuildingsController {
     const traceId = req.headers['x-trace-id'];
     try {
       const buildings = await this.buildingsService.findAll();
-      // this.logger.log('Buildings retrieved successfully');
-      return ApiResponseHandler.ok(
-        'Buildings retrieved successfully',
-        buildings,
-      );
+      this.logger.log('Buildings retrieved successfully');
+      return ApiResponseHandler.ok('Buildings retrieved successfully',buildings);
     } catch (error) {
-      // this.logger.error(error, { traceId });
+      this.logger.error(error, {traceId, context: BuildingsController.name});
       throw error;
     }
   }
@@ -71,13 +68,10 @@ export class BuildingsController {
     const traceId = req.headers['x-trace-id'];
     try {
       const building = await this.buildingsService.findOne(id);
-      // this.logger.log('Buildings retrieved successfully');
+      this.logger.log('Building retrieved successfully', BuildingsController.name);
       return ApiResponseHandler.ok('Building retrieved successfully', building);
     } catch (error) {
-      // this.logger.error(error, {
-      //   traceId,
-      //   buildingId: id,
-      // });
+      this.logger.error(error, {traceId, context: BuildingsController.name});
       throw error;
     }
   }
@@ -93,22 +87,11 @@ export class BuildingsController {
   ) {
     const traceId = req.headers['x-trace-id'];
     try {
-      // const building = await this.buildingsService.findOne(id);
-      // if (!building) {
-      //   throw ApiResponseHandler.error(
-      //     new NotFoundException('Building not found'),
-      //   );
-      // }
       await this.buildingsService.update(id, updateBuildingDto);
-
-      // this.logger.log('Building retrieved successfully');
+      this.logger.log('Building retrieved successfully');
       return ApiResponseHandler.ok(`Building with ID ${id} updated successfully`);
     } catch (error) {
-      // this.logger.error(error, {
-      //   traceId,
-      //   buildingId: id,
-      // });
-
+      this.logger.error(error, {traceId, context: BuildingsController.name});
       throw error;
     }
   }
@@ -125,14 +108,10 @@ export class BuildingsController {
     const traceId = req.headers['x-trace-id'];
     try {
       await this.buildingsService.remove(id);
+      this.logger.log('Building retrieved successfully');
       return ApiResponseHandler.ok(`Building with ID ${id} deleted successfully`);
-
-      // this.logger.log('Building retrieved successfully');
     } catch (error) {
-      // this.logger.error(error, {
-      //   traceId,
-      //   buildingId: id,
-      // });
+      this.logger.error(error, {traceId, context: BuildingsController.name});
       throw error;
     }
   }
