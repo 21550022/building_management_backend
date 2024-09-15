@@ -35,21 +35,16 @@ export class BuildingLocationsController {
   ) {
     const traceId = req.headers['x-trace-id'];
     try {
-      const buildingLocation = await this.buildingLocationsService.create(
-        createBuildingLocationDto,
-      );
+      const buildingLocation = await this.buildingLocationsService.create(createBuildingLocationDto);
       // this.logger.log('Building location created successfully');
       return ApiResponseHandler.created(
         'Building location created successfully',
         buildingLocation,
       );
     } catch (error) {
-      if (error.status === HttpStatus.NOT_FOUND) {
-        // this.logger.error('Building not found', { traceId });
-        throw ApiResponseHandler.error(error);
-      }
+
       // this.logger.error(error?.response, { traceId });
-      throw ApiResponseHandler.error(error?.response);
+      throw error;
     }
   }
   @ApiOperation({ summary: 'get all building locations' })
@@ -65,11 +60,7 @@ export class BuildingLocationsController {
       );
     } catch (error) {
       // this.logger.error('Failed to retrieve building locations', { traceId });
-      throw ApiResponseHandler.error(
-        new InternalServerErrorException(
-          'Failed to retrieve building locations',
-        ),
-      );
+      throw error;
     }
   }
 
@@ -126,30 +117,14 @@ export class BuildingLocationsController {
     const traceId = req.headers['x-trace-id'];
     try {
       const updatedBuildingLocation =
-        await this.buildingLocationsService.update(
-          id,
-          updateBuildingLocationDto,
-        );
+        await this.buildingLocationsService.update( id, updateBuildingLocationDto );
       // this.logger.log('Building location updated successfully');
       return ApiResponseHandler.ok(
         'Building location updated successfully',
         updatedBuildingLocation,
       );
     } catch (error) {
-      if (error.status === HttpStatus.NOT_FOUND) {
-        // this.logger.error('Building location not found', {
-        //   traceId,
-        //   buildingLocationId: id,
-        // });
-        throw ApiResponseHandler.error(error);
-      }
-      // this.logger.error('Failed to update building location', {
-      //   traceId,
-      //   buildingLocationId: id,
-      // });
-      throw ApiResponseHandler.error(
-        new InternalServerErrorException('Failed to update building location'),
-      );
+      throw error;
     }
   }
 
@@ -166,20 +141,7 @@ export class BuildingLocationsController {
         ok,
       );
     } catch (error) {
-      if (error.status === HttpStatus.NOT_FOUND) {
-        // this.logger.error('Building location not found', {
-        //   traceId,
-        //   buildingLocationId: id,
-        // });
-        throw ApiResponseHandler.error(error);
-      }
-      // this.logger.error('Failed to delete building location', {
-      //   traceId,
-      //   buildingLocationId: id,
-      // });
-      throw ApiResponseHandler.error(
-        new InternalServerErrorException('Failed to delete building location'),
-      );
+      throw error;
     }
   }
 }
