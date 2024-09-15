@@ -11,6 +11,7 @@ import {
   BeforeUpdate,
   Column,
   Entity,
+  JoinColumn,
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
@@ -29,7 +30,8 @@ export class Building extends BaseEntity {
   async checkBuildingId() {
     try {
       const { id } = this;
-      if (!id) {
+
+      if (!id && isNaN(id)) {
         throw new BadRequestException('Building ID is required');
       }
 

@@ -151,7 +151,7 @@ export class BuildingLocation extends BaseEntity {
   async checkLocationId() {
     try {
       const { id } = this;
-      if (!id) {
+      if (!id && isNaN(id)) {
         throw new BadRequestException('Location ID is required');
       }
       const location = await BuildingLocation.findOneBy({ id });
