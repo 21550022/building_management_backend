@@ -48,6 +48,7 @@ export class BuildingLocation extends BaseEntity {
   async checkUniqueLocationName() {
     try {
       const { locationName } = this;
+      if(!locationName) return
       const location = await BuildingLocation.findOneBy({ locationName });
 
       if (location) {
@@ -61,6 +62,7 @@ export class BuildingLocation extends BaseEntity {
   async checkUniqueLocationNumber() {
     try {
       const { locationNumber } = this;
+      if(!locationNumber) return
       const location = await BuildingLocation.findOneBy({ locationNumber });
 
       if (location) {
@@ -75,7 +77,7 @@ export class BuildingLocation extends BaseEntity {
     try {
       const { buildingId } = this;
 
-      if (!buildingId) {
+      if (!buildingId && isNaN(buildingId)) {
         throw new BadRequestException('Building ID is required');
       }
 
@@ -94,7 +96,7 @@ export class BuildingLocation extends BaseEntity {
     try {
       const { buildingId } = this;
 
-      if (!buildingId) return
+      if (!buildingId && isNaN(buildingId)) return
 
       const building = await Building.findOneBy({ id: buildingId })
 
@@ -132,15 +134,21 @@ export class BuildingLocation extends BaseEntity {
     try {
       const { id, parentLocationId } = this;
 
-      if (!parentLocationId) return
+      if (!parentLocationId && isNaN(parentLocationId)) return
 
       const location = await BuildingLocation.findOneBy({ id: parentLocationId });
+
+      console.log({location});
+
 
       if (!location) {
         throw new BadRequestException(`Parent location with ID ${parentLocationId} not exists`);
       }
       else if (id === parentLocationId) {
         throw new ConflictException('Parent location cannot be the same as the location');
+      }
+      else if (location.parentLocationId === id) {
+        throw new ConflictException('Circular reference detected: parent location cannot be a child of its own child');
       }
       return location;
     } catch (error) {

@@ -47,6 +47,7 @@ export class Building extends BaseEntity {
   async checkUniqueName() {
     try {
       const { name } = this;
+      if (!name) return;
       const building = await Building.findOneBy({ name });
       if (building) {
         throw new ConflictException('Building name is already existed');
