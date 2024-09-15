@@ -17,11 +17,15 @@ export class BuildingsService {
   }
 
   findAll() {
-    return this.buildingsRepository.find({ relations: ['locations'] });
+    return this.buildingsRepository.find({
+      relations: ['locations'],
+      select: ['id', 'name', 'locations'],
+    });
   }
 
   async findOne(id: number) {
-    const building = await this.buildingsRepository.findOneBy({ id });
+    const building = await this.buildingsRepository.findOne({
+      where: { id }, relations: ['locations'], select: ['id', 'name', 'locations'] });
     if (!building) {
       throw new NotFoundException(`Building with ID ${id} not found`);
     }
@@ -29,10 +33,7 @@ export class BuildingsService {
   }
 
   async update(id: number, updateBuildingDto: UpdateBuildingDto) {
-    const building = this.buildingsRepository.create({
-      id,
-      ...updateBuildingDto,
-    });
+    const building = this.buildingsRepository.create({ id, ...updateBuildingDto });
     return await this.buildingsRepository.update(id, building);
   }
 

@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   ConflictException,
   NotFoundException
 } from '@nestjs/common';
@@ -25,11 +26,14 @@ export class Building extends BaseEntity {
   @OneToMany(() => BuildingLocation, (location) => location.building)
   locations: BuildingLocation[];
 
-  async checkExist() {
+  async checkBuildingId() {
     try {
       const { id } = this;
-      const building = await Building.findOneBy({ id });
+      if (!id) {
+        throw new BadRequestException('Building ID is required');
+      }
 
+      const building = await Building.findOneBy({ id });
       if (!building) {
         throw new NotFoundException(`Building with ID ${id} not found`);
       }
@@ -62,7 +66,7 @@ export class Building extends BaseEntity {
   @BeforeUpdate()
   async validateUpdate() {
     try {
-      await this.checkExist();
+      await this.checkBuildingId();
       await this.checkUniqueName();
     } catch (error) {
       throw error;
@@ -72,7 +76,7 @@ export class Building extends BaseEntity {
   @BeforeRemove()
   async validateRemove() {
     try {
-      await this.checkExist();
+      await this.checkBuildingId();
     } catch (error) {
       throw error;
     }
