@@ -23,8 +23,8 @@ export const loggerOption: WinstonModuleOptions = {
   level: 'info',
   format: format.combine(
     formatTimestamp,
-    format.ms(),
-    nestLikeFormat
+    // format.ms(),
+    nestLikeFormat,
   ),
   transports: [
     new DailyRotateFile({
@@ -41,8 +41,5 @@ export const loggerOption: WinstonModuleOptions = {
       maxFiles: logMaxCount,
       level: 'error',
     }),
-    // new transports.Stream({
-    //   stream: new DatabaseStream(),
-    // }),
   ],
 };
