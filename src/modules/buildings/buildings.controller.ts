@@ -22,7 +22,9 @@ export class BuildingsController {
   constructor(
     private readonly buildingsService: BuildingsService,
     private readonly logger: AppLoggerService,
-  ) {}
+  ) {
+    this.logger.setContext(BuildingsController.name);
+  }
 
   @ApiOperation({ summary: 'create new building' })
   @ApiBody({ required: true, type: CreateBuildingDto })
@@ -68,7 +70,7 @@ export class BuildingsController {
     const traceId = req.headers['x-trace-id'];
     try {
       const building = await this.buildingsService.findOne(id);
-      this.logger.log('Building retrieved successfully', BuildingsController.name);
+      this.logger.log('Building retrieved successfully');
       return ApiResponseHandler.ok('Building retrieved successfully', building);
     } catch (error) {
       this.logger.error(error.message, error.stack, `${BuildingsController.name} - TraceID: ${traceId}`);

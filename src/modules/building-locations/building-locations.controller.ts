@@ -21,7 +21,9 @@ export class BuildingLocationsController {
   constructor(
     private readonly buildingLocationsService: BuildingLocationsService,
     private readonly logger: AppLoggerService,
-  ) {}
+  ) {
+    this.logger.setContext(BuildingLocationsController.name);
+  }
 
   @ApiOperation({ summary: 'create new building location' })
   @ApiBody({ required: true, type: CreateBuildingLocationDto })
