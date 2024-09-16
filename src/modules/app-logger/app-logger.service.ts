@@ -27,7 +27,7 @@ export class AppLoggerService extends ConsoleLogger {
 
   error(message: any, ...optionalParams: any[]): void {
     super.error(message, ...optionalParams);
-    this.logger.error(JSON.stringify(message), ...optionalParams);
+    this.logger.error(message, ...optionalParams);
   }
 
   create(createAppLoggerDto: CreateAppLoggerDto) {

@@ -37,7 +37,7 @@ export class BuildingsController {
       this.logger.log('Building created successfully');
       return ApiResponseHandler.created('Building created successfully');
     } catch (error) {
-      this.logger.error(error, {traceId, context: BuildingsController.name});
+      this.logger.error(error.message, error.stack, `${BuildingsController.name} - TraceID: ${traceId}`);
       throw error;
     }
   }
@@ -51,7 +51,7 @@ export class BuildingsController {
       this.logger.log('Buildings retrieved successfully');
       return ApiResponseHandler.ok('Buildings retrieved successfully',buildings);
     } catch (error) {
-      this.logger.error(error, {traceId, context: BuildingsController.name});
+      this.logger.error(error.message, error.stack, `${BuildingsController.name} - TraceID: ${traceId}`);
       throw error;
     }
   }
@@ -71,7 +71,7 @@ export class BuildingsController {
       this.logger.log('Building retrieved successfully', BuildingsController.name);
       return ApiResponseHandler.ok('Building retrieved successfully', building);
     } catch (error) {
-      this.logger.error(error, {traceId, context: BuildingsController.name});
+      this.logger.error(error.message, error.stack, `${BuildingsController.name} - TraceID: ${traceId}`);
       throw error;
     }
   }
@@ -91,7 +91,7 @@ export class BuildingsController {
       this.logger.log('Building retrieved successfully');
       return ApiResponseHandler.ok(`Building with ID ${id} updated successfully`);
     } catch (error) {
-      this.logger.error(error, {traceId, context: BuildingsController.name});
+      this.logger.error(error.message, error.stack, `${BuildingsController.name} - TraceID: ${traceId}`);
       throw error;
     }
   }
@@ -111,7 +111,7 @@ export class BuildingsController {
       this.logger.log('Building retrieved successfully');
       return ApiResponseHandler.ok(`Building with ID ${id} deleted successfully`);
     } catch (error) {
-      this.logger.error(error, {traceId, context: BuildingsController.name});
+      this.logger.error(error.message, error.stack, `${BuildingsController.name} - TraceID: ${traceId}`);
       throw error;
     }
   }

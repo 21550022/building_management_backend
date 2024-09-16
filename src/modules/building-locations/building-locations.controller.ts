@@ -36,7 +36,7 @@ export class BuildingLocationsController {
       this.logger.log('Building location created successfully');
       return ApiResponseHandler.created('Building location created successfully');
     } catch (error) {
-      this.logger.error(error, { traceId, context: BuildingLocationsController.name });
+      this.logger.error(error.message, error.stack, `${BuildingLocationsController.name} - TraceID: ${traceId}`);
       throw error;
     }
   }
@@ -49,7 +49,7 @@ export class BuildingLocationsController {
       this.logger.log('Building locations retrieved successfully');
       return ApiResponseHandler.ok('Building locations retrieved successfully', buildingLocations);
     } catch (error) {
-      this.logger.error(error, { traceId, context: BuildingLocationsController.name });
+      this.logger.error(error.message, error.stack, `${BuildingLocationsController.name} - TraceID: ${traceId}`);
       throw error;
     }
   }
@@ -69,7 +69,7 @@ export class BuildingLocationsController {
       this.logger.log('Building location retrieved successfully');
       return ApiResponseHandler.ok('Building location retrieved successfully', buildingLocation);
     } catch (error) {
-      this.logger.error(error, { traceId, context: BuildingLocationsController.name });
+      this.logger.error(error.message, error.stack, `${BuildingLocationsController.name} - TraceID: ${traceId}`);
       throw ApiResponseHandler.error(error);
     }
   }
@@ -89,7 +89,7 @@ export class BuildingLocationsController {
       this.logger.log('Building location updated successfully');
       return ApiResponseHandler.ok('Building location updated successfully');
     } catch (error) {
-      this.logger.error(error, { traceId, context: BuildingLocationsController.name });
+      this.logger.error(error.message, error.stack, `${BuildingLocationsController.name} - TraceID: ${traceId}`);
       throw error;
     }
   }
@@ -104,7 +104,7 @@ export class BuildingLocationsController {
       this.logger.log('Building location deleted successfully');
       return ApiResponseHandler.ok('Building location deleted successfully');
     } catch (error) {
-      this.logger.error(error, { traceId, context: BuildingLocationsController.name });
+      this.logger.error(error.message, error.stack, `${BuildingLocationsController.name} - TraceID: ${traceId}`);
       throw error;
     }
   }
