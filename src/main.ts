@@ -3,12 +3,9 @@ import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { ConfigService } from '@nestjs/config';
-import { AppLoggerService } from './modules/app-logger/app-logger.service';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule, {
-    logger: new AppLoggerService()
-  });
+  const app = await NestFactory.create(AppModule);
   app.useGlobalPipes(new ValidationPipe());
   app.enableCors({
     origin: '*',
