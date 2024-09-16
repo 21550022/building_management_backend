@@ -10,13 +10,16 @@ export class AppLogger {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({ nullable: true, default: null })
   level: string;
 
-  @Column()
+  @Column({ nullable: true, default: null })
+  context: string;
+
+  @Column({ nullable: true, default: null })
   message: string;
 
-  @Column({ nullable: true })
+  @Column({ nullable: true, default: null })
   meta: string;
 
   @CreateDateColumn()
